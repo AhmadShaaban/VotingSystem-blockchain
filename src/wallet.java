@@ -41,3 +41,17 @@ public class wallet {
         StrPublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
         StrPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
     }
+    public static boolean verify(PublicKey publicKey,byte[] ss,String data){
+        boolean flag = true;
+        try {
+            Signature sd = Signature.getInstance("SHA256withECDSA");
+            sd.initVerify(publicKey);
+            sd.update(data.getBytes());
+            flag = sd.verify(ss);
+
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return  flag;
+    }
