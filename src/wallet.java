@@ -1,3 +1,9 @@
+import java.security.*;
+import java.security.spec.ECGenParameterSpec;
+import java.security.MessageDigest;
+import java.util.*;
+
+
 public class wallet {
     public PublicKey publicKey;
     public PrivateKey privateKey;
@@ -41,6 +47,19 @@ public class wallet {
         StrPublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
         StrPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
     }
+
+    public byte[] generateSignature(String data){
+        byte ss[] = new byte[0];
+        try {
+            Signature s = Signature.getInstance("SHA256withECDSA");
+            s.initSign(privateKey);
+            s.update(data.getBytes());
+             ss = s.sign();
+        }
+        catch (Exception e){}
+        return ss;
+    }
+
     public static boolean verify(PublicKey publicKey,byte[] ss,String data){
         boolean flag = true;
         try {
@@ -55,3 +74,5 @@ public class wallet {
         }
         return  flag;
     }
+
+}
